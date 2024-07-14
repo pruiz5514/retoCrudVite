@@ -24,29 +24,40 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (typeof data == "string") {
         alert("Error");
     } else {
-        data.map((user: IUsers) => {
-            const userCard = new Users(user.id, user.name, user.email, user.avatar);
-            mainContainer.renderCards(
-                userCard.id,
-                userCard.name,
-                userCard.email,
-                userCard.avatar
-            );
-        });
+        showCards(data)
     }
 
-    document.addEventListener("click", (event: Event) => {
+    document.addEventListener("click", async (event: Event) => {
 
         if ((event.target as HTMLElement).parentElement?.classList.contains("delete-button")) {
             const idDeleteButton = (event.target as HTMLElement).parentElement?.getAttribute("button-id");
             const userManager: UserManager = new UserManager();
 
-            alert(idDeleteButton)
-
             if (idDeleteButton != null) {
-                userManager.deleteUser(url, idDeleteButton)
+                await userManager.deleteUser(url, idDeleteButton);
+                const data: IUsers[] | string = await getUser();
+
+                if (typeof data == "string") {
+                    alert("Error");
+                } else {
+                    showCards(data)
+                }
             }
 
         }
     });
 });
+
+
+function showCards(array: IUsers[]) {
+    container.innerHTML = " "
+    array.map((user: IUsers) => {
+        const userCard = new Users(user.id, user.name, user.email, user.avatar);
+        mainContainer.renderCards(
+            userCard.id,
+            userCard.name,
+            userCard.email,
+            userCard.avatar
+        );
+    });
+}

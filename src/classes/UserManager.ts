@@ -67,7 +67,6 @@ export class UserManager {
   }
 
   async deleteUser(url: string, id: string) {
-    alert(`${url}/${id}`)
     await fetch(`${url}/${id}`, {
       method: 'DELETE',
       headers: {
